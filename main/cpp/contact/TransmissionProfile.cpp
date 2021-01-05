@@ -89,7 +89,8 @@ void TransmissionProfile::Initialize(const ptree& configPt, const ptree& disease
     			if (index_age < susceptibility_string.size()) {
     				m_susceptibility_age[index_age] = stod(susceptibility_string[index_age]);
     			} else {
-    				m_susceptibility_age[index_age] = 0;
+    				// re-use last value
+    				m_susceptibility_age[index_age] = stod(susceptibility_string[susceptibility_string.size()-1]);
     			}
     		}
     } else {

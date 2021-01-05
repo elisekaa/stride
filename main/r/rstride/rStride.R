@@ -21,7 +21,9 @@
 ############################################################################ #
 
 # # load simid.rtools package (and install if not yet installed)
-if(!'simid.rtools' %in% installed.packages()[,1]){
+if(!'simid.rtools' %in% installed.packages()[,1] || 
+      !all(unlist(packageVersion("simid.rtools")) >= list(0,1,43))){ # at least 0.1.43 is required
+  
   require(devtools,quietly = T)
   devtools::install_github("lwillem/simid_rtools",force=F,quiet=T)
   #devtools::uninstall(simid.rtools)
@@ -287,11 +289,12 @@ run_rStride <- function(exp_design               = exp_design,
   cluster_timeout <- ifelse(.rstride$is_ua_cluster(),36000,1000)
   
   # start parallel workers
-  smd_start_cluster(timeout = cluster_timeout)
+  smd_start_cluster(timeout = cluster_timeout, num_proc = num_parallel_workers)
+  
   
   ################################## #
   ## CONFIG ID                    ####
-  ####################################
+  ################################## #
   
   # configuration id
   exp_design$config_id <- .rstride$get_config_id(exp_design)

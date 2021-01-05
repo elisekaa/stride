@@ -32,7 +32,8 @@ if(0==1){
   event_logfile <- file.path(f_exp_dir,'event_log.txt')
   exp_id <- 2;bool_parse_tracing=TRUE
   xx <- parse_event_logfile(event_logfile,2)
-  
+  event_logfile <- event_log_filename
+  exp_id <- i_exp;bool_parse_tracing=TRUE;bool_transmission_all = TRUE
 }
 parse_event_logfile <- function(event_logfile,exp_id,
                                 bool_parse_tracing=TRUE,
@@ -57,6 +58,9 @@ parse_event_logfile <- function(event_logfile,exp_id,
   # - CONT    contact event
   # - VACC    additional immunization
   # - TRACE   contact tracing
+  # - UNITEST] universal test log
+  # - UNITEST-ISOLATE universal test strategy isolations
+  # - NCOM    non-compliance to social distancing measures
 
   ###################### #
   ## PARTICIPANT DATA ####
@@ -82,7 +86,7 @@ parse_event_logfile <- function(event_logfile,exp_id,
   header_transm       <- c('local_id', 'infector_id','part_age',
                            'infector_age','pool_type','sim_day','id_index_case',
                            'start_infectiousness','end_infectiousness','start_symptoms','end_symptoms',
-                           'infector_is_symptomatic')
+                           'infector_is_symptomatic','individual_transm_prob')
   } else {
     header_transm       <- c(NA, #'local_id',
                              NA, #'infector_id',
@@ -95,7 +99,8 @@ parse_event_logfile <- function(event_logfile,exp_id,
                              NA, #'end_infectiousness',
                              'start_symptoms',
                              'end_symptoms',
-                             NA #'infector_is_symptomatic'
+                             NA, #'infector_is_symptomatic',
+                             NA  #'individual_transm_prob'
                             )
   }
   
@@ -167,11 +172,29 @@ parse_event_logfile <- function(event_logfile,exp_id,
                                                     exp_id        = exp_id)
   
 
+  ########################################## #
+  ## NON-COMPLIANCE                       ####
+  ########################################## # 
+  header_ncompliance   <- c('local_id', 'part_age', 
+                           'household_id', 'noncomplier_household',
+                           'school_id', 'noncomplier_school',
+                           'college_id', 'noncomplier_college',
+                           'workplace_id',  'noncomplier_workplace',
+                           #'hh_cluster_id', 'noncomplier_hh_cluster',
+                           'prim_comm_id','noncomplier_prim_comm',
+                           'sec_comm_id', 'noncomplier_sec_comm')
+  
+
+  rstride_out$ncompliance <- reformat_log_data(event_logfile = event_logfile,
+                                               data_log_cat  = data_log_cat,
+                                               log_cat       = "NCOM",
+                                               colnames_all  = header_ncompliance,
+                                               exp_id        = exp_id)
+  
   # print CLI message and return
   cat("LOG PARSING COMPLETE",fill=TRUE)
   return(rstride_out)
 }
-
 
 ################################# #
 ## REFORMAT LOG DATA           ####

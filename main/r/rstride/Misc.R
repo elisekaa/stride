@@ -595,10 +595,10 @@ if(!(exists('.rstride'))){
     # load directory content (non recursive)
     stride_dir_tag  <- 'stride-'
     stride_dirs     <- dir(install_dir,pattern = stride_dir_tag)
-    stride_dirs_num <- as.numeric(sub(stride_dir_tag,'',stride_dirs))
+    stride_dirs_num <- suppressWarnings(as.numeric(sub(stride_dir_tag,'',stride_dirs)))
     
     # select last directory
-    last_stride_dir <- stride_dirs[stride_dirs_num == max(stride_dirs_num)]
+    last_stride_dir <- stride_dirs[order(stride_dirs_num,decreasing = T)[1]]
     
     # set work directory
     setwd(file.path(install_dir,last_stride_dir))

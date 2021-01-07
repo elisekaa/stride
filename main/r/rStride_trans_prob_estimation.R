@@ -83,8 +83,19 @@ run_simulations <- function(scenario_name, num_runs,
                              dir_postfix         = scenario_name,
                              remove_run_output   = FALSE,
                              parse_log_data      = FALSE,
-                             use_date_prefix     = FALSE, 
-                             stdout_fn                = 'out.txt' )
+                             use_date_prefix     = FALSE)
+  
+  # Remove some output files I don't need
+  for (i in 1:dim(exp_design)[1]) {
+    exp_dir <- file.path(".", project_dir, paste0('exp',sprintf("%04s", i)), fsep = .Platform$file.sep)
+    if (dir.exists(exp_dir)) {
+      unlink(file.path(exp_dir, "exposed.csv"))
+      unlink(file.path(exp_dir, "cases.csv"))
+      unlink(file.path(exp_dir, "infected.csv"))
+      unlink(file.path(exp_dir, "infectious.csv"))
+      unlink(file.path(exp_dir, "symptomatic.csv"))
+    }
+  }
   
 }
 

@@ -38,7 +38,7 @@ run_simulations <- function(scenario_name,
                             num_runs) {
   exp_design <- expand.grid(
       transmission_probability                      = 0.08,
-      num_days                                      = 120,
+      num_days                                      = 180,
       rng_seed                                      = seq(num_runs),
       num_infected_seeds                            = num_infected_seeds, 
       disease_config_file                           = "disease_covid19_lognorm.xml",

@@ -103,6 +103,8 @@ def main(output_dir, scenario_names, overdispersion_params, display_scenario_nam
         tp_i = 0
         for tp in tps_sorted:
             k = overdispersion_params[scenario_i]
+            if k is None:
+                k = np.inf
             res = probplot(secondary_cases_by_tp[tp], dist=nbinom, sparams=(k, k / (mean_secondary_cases_by_tp[tp_i] + k)), fit=False, plot=plt)
             save_figure(output_dir, "QQplot_" + scenario + "_tp_" + str(tp))
 
@@ -131,7 +133,7 @@ if __name__=="__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("output_dir", type=str, help="Directory containing simulation results")
     parser.add_argument("scenario_names", type=str, nargs="+", help="Names of scenarios to be postprocessed")
-    parser.add_argument("overdispersion_params", type=float, nargs="+", help="Overdispersion parameters for the scenarios")
+    parser.add_argument("--overdispersion_params", type=float, nargs="+", default=[None, 10,0.6,0.4,0.2,] help="Overdispersion parameters for the scenarios")
     parser.add_argument("--display_scenario_names", type=str, nargs="+", default=[], help="Names for scenarios to be displayed on plots")
 
     args = parser.parse_args()

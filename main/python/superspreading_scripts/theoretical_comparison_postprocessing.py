@@ -139,9 +139,9 @@ if __name__=="__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("output_dir", type=str, help="Directory containing simulation results")
     parser.add_argument("scenario_names", type=str, nargs="+", help="Names of scenarios to be postprocessed")
-    parser.add_argument("overdispersion_params", type=float, nargs="+", help="Overdispersion parameters for the scenarios - Use None if not applicable")
-    parser.add_argument("population_file", type=str)
-    parser.add_argument("contact_matrix_file", type=str)
+    parser.add_argument("--overdispersion_params", type=float, nargs="+", default=[None, 10, 0.6, 0.4, 0.2], help="Overdispersion parameters for the scenarios - Use None if not applicable")
+    parser.add_argument("--population_file", type=str, default=os.path.join("..", "resources", "data", "pop_belgium3000k_c500_teachers_censushh.csv"))
+    parser.add_argument("--contact_matrix_file", type=str, default=os.path.join("..", "resources", "data", "contact_matrix_flanders_conditional_teachers.xml"))
 
     args = parser.parse_args()
     main(args.output_dir, args.scenario_names, args.overdispersion_params, args.population_file, args.contact_matrix_file)
